@@ -30,7 +30,7 @@ cd Casino
 
 After Cloning, Run it on any browser.
 - ***Deposit Amount***: Enter the amount of money you'd like to deposit.
-- ***Place Your Be***t: Input the amount you'd like to bet per line (between $1 - $30).
+- ***Place Your Be***t: Input the amount you'd like to bet per line (between $1 - $100).
 - ***Select Number of Lines***: Choose from 1, 2, or 3 lines to bet on.
 - ***Spin the Wheel***: Click “Spin” to play. Symbols will randomly generate in a 3x3 grid.
 - ***Check Results***:  
