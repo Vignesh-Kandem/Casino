@@ -19,7 +19,6 @@
     #slot-display {
       display: grid;
       grid-template-columns: repeat(3, 80px);
-      grid-template-rows: repeat(3, 80px);
       gap: 10px;
       justify-content: center;
       margin: 20px 0;
@@ -81,6 +80,11 @@
   <div id="result"></div>
   <div id="warning"></div>
 
+  <audio id="spin-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-spinning-1938.mp3"></audio>
+  <audio id="win-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-notification-2018.mp3"></audio>
+  <audio id="lose-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-retro-losing-2025.mp3"></audio>
+  <audio id="empty-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+
   <script>
     let balance = 0;
     const ROWS = 3, COLS = 3;
@@ -105,7 +109,7 @@
       if (deposit && parseInt(deposit) > 0) {
         balance = parseInt(deposit);
         document.getElementById('controls').style.display = 'block';
-        document.getElementById('balance').innerText = `Balance: $${balance}`;
+        document.getElementById('balance').innerText = `Balance: ₹${balance}`;
         document.getElementById('warning').innerText = '';
       }
     }
@@ -179,16 +183,15 @@
       const totalBet = bet * lines;
 
       if (!bet || bet < 1 || bet > 100) {
-        alert('Please enter a valid bet amount (1 to 100).');
+        alert('Invalid bet amount.');
         return;
       }
-
       if (totalBet > balance) {
-        document.getElementById('warning').innerText = `⚠️ You can't spin with the amount. Please lower your bet or deposit more.`;
+        document.getElementById('warning').innerText = "⚠️ You can't spin with the amount. Please lower your bet or deposit more.";
+        playSound('empty-sound');
         return;
       }
 
-      document.getElementById('warning').innerText = '';
       playSound('spin-sound');
       balance -= totalBet;
       const reels = getSlotMachineSpin();
@@ -196,9 +199,9 @@
       const [winnings, winningLines] = checkWinnings(reels, lines, bet);
       balance += winnings;
 
-      document.getElementById('balance').innerText = `Balance: $${balance}`;
+      document.getElementById('balance').innerText = `Balance: ₹${balance}`;
       document.getElementById('result').innerText = winnings > 0
-        ? `🎉 You won $${winnings} on line(s): ${winningLines.join(', ')}`
+        ? `🎉 You won ₹${winnings} on line(s): ${winningLines.join(', ')}`
         : `😢 No win this time.`;
       playSound(winnings > 0 ? 'win-sound' : 'lose-sound');
 
