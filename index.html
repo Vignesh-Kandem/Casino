@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slot Machine Game</title>
+  <style>
+    body {
+      background: #1e272e;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    #slot-display {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      grid-template-rows: repeat(3, 80px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+      font-size: 2rem;
+    }
+    .slot {
+      width: 80px;
+      height: 80px;
+      background-color: #2f3640;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+    input, button, select {
+      padding: 10px;
+      margin: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: #00a8ff;
+      color: #fff;
+      cursor: pointer;
+    }
+    #result, #balance {
+      margin-top: 20px;
+      font-size: 1.2rem;
+    }
+    #warning {
+      color: #ff4757;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎰 Lucky Spin Casino</h1>
+
+  <div>
+    <input type="number" id="deposit" placeholder="Enter deposit" />
+    <button onclick="startGame()">Start</button>
+  </div>
+
+  <div id="controls" style="display:none;">
+    <p id="balance"></p>
+    <input type="number" id="bet" placeholder="Bet per line" min="1" max="100" />
+    <select id="lines">
+      <option value="1">1 Line</option>
+      <option value="2">2 Lines</option>
+      <option value="3">3 Lines</option>
+    </select>
+    <button onclick="spin()">Spin</button>
+  </div>
+
+  <div id="slot-display"></div>
+  <div id="result"></div>
+  <div id="warning"></div>
+
+  <script>
+    let balance = 0;
+    const ROWS = 3, COLS = 3;
+    const MAX_LINES = 3;
+    const symbolMap = {
+      '💎': { count: 2, value: 5 },
+      '🍀': { count: 4, value: 4 },
+      '🍋': { count: 6, value: 3 },
+      '🍒': { count: 8, value: 2 },
+    };
+
+    function playSound(id) {
+      const sound = document.getElementById(id);
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play();
+      }
+    }
+
+    function startGame() {
+      const deposit = document.getElementById('deposit').value;
+      if (deposit && parseInt(deposit) > 0) {
+        balance = parseInt(deposit);
+        document.getElementById('controls').style.display = 'block';
+        document.getElementById('balance').innerText = `Balance: $${balance}`;
+        document.getElementById('warning').innerText = '';
+      }
+    }
+
+    function getSlotMachineSpin() {
+      const allSymbols = [];
+      for (let sym in symbolMap) {
+        for (let i = 0; i < symbolMap[sym].count; i++) allSymbols.push(sym);
+      }
+      const reels = [];
+      for (let c = 0; c < COLS; c++) {
+        const current = [...allSymbols];
+        const column = [];
+        for (let r = 0; r < ROWS; r++) {
+          const rand = Math.floor(Math.random() * current.length);
+          column.push(current.splice(rand, 1)[0]);
+        }
+        reels.push(column);
+      }
+      return reels;
+    }
+
+    function transpose(columns) {
+      const rows = [];
+      for (let r = 0; r < ROWS; r++) {
+        const row = [];
+        for (let c = 0; c < COLS; c++) {
+          row.push(columns[c][r]);
+        }
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function checkWinnings(reels, lines, bet) {
+      let winnings = 0, winningLines = [];
+      for (let l = 0; l < lines; l++) {
+        const symbol = reels[0][l];
+        let won = true;
+        for (let c = 1; c < COLS; c++) {
+          if (reels[c][l] !== symbol) {
+            won = false;
+            break;
+          }
+        }
+        if (won) {
+          winnings += symbolMap[symbol].value * bet;
+          winningLines.push(l + 1);
+        }
+      }
+      return [winnings, winningLines];
+    }
+
+    function displaySlots(reels) {
+      const rows = transpose(reels);
+      const display = document.getElementById('slot-display');
+      display.innerHTML = '';
+      rows.forEach(row => {
+        row.forEach(symbol => {
+          const div = document.createElement('div');
+          div.className = 'slot';
+          div.innerText = symbol;
+          display.appendChild(div);
+        });
+      });
+    }
+
+    function spin() {
+      const bet = parseInt(document.getElementById('bet').value);
+      const lines = parseInt(document.getElementById('lines').value);
+      const totalBet = bet * lines;
+
+      if (!bet || bet < 1 || bet > 100) {
+        alert('Please enter a valid bet amount (1 to 100).');
+        return;
+      }
+
+      if (totalBet > balance) {
+        document.getElementById('warning').innerText = `⚠️ You can't spin with the amount. Please lower your bet or deposit more.`;
+        return;
+      }
+
+      document.getElementById('warning').innerText = '';
+      playSound('spin-sound');
+      balance -= totalBet;
+      const reels = getSlotMachineSpin();
+      displaySlots(reels);
+      const [winnings, winningLines] = checkWinnings(reels, lines, bet);
+      balance += winnings;
+
+      document.getElementById('balance').innerText = `Balance: $${balance}`;
+      document.getElementById('result').innerText = winnings > 0
+        ? `🎉 You won $${winnings} on line(s): ${winningLines.join(', ')}`
+        : `😢 No win this time.`;
+      playSound(winnings > 0 ? 'win-sound' : 'lose-sound');
+
+      if (balance <= 0) {
+        playSound('empty-sound');
+        document.getElementById('controls').style.display = 'none';
+        document.getElementById('warning').innerText = `🚫 You can't spin, your account is empty! Please refresh and deposit again.`;
+      }
+    }
+  </script>
+</body>
+</html>
