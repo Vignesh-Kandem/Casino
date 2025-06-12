@@ -13,9 +13,10 @@ Welcome to *Lucky Spin*, a fun and interactive casino game brought to life in yo
 
 ## 🧰 Technologies Used
 
-- HTML5
-- CSS3 (Grid Layout)
-- JavaScript
+| Technology | Purpose |
+|------------|---------|
+| Javascript | Performing random spin generator | 
+| HTML | Page structure and Interface |
 
 ## 📦 Installation
 
