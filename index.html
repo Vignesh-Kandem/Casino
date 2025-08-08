@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slot Machine Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>🎰 Lucky Spin Casino</h1>
+
+  <div>
+    <input type="number" id="deposit" placeholder="Enter deposit" />
+    <button onclick="startGame()">Start</button>
+  </div>
+
+  <div id="controls" style="display:none;">
+    <p id="balance"></p>
+    <input type="number" id="bet" placeholder="Bet per line" min="1" max="100" />
+    <select id="lines">
+      <option value="1">1 Line</option>
+      <option value="2">2 Lines</option>
+      <option value="3">3 Lines</option>
+    </select>
+    <button onclick="spin()">Spin</button>
+  </div>
+
+  <div id="slot-display"></div>
+  <div id="result"></div>
+  <div id="warning"></div>
+
+  <script src="main.js"></script>
+</body>
+</html>
