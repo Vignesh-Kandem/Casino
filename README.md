@@ -1,5 +1,9 @@
 # 🎰 Lucky Spin - Web Casino Game
-Welcome to *Lucky Spin*, a fun and interactive casino game brought to life in your browser using HTML, CSS, and JavaScript! Inspired by the classic terminal-based Python game, this version adds a beautiful UI with animations and sound effects for an exciting gaming experience — no backend or installations needed.
+Welcome to *Lucky Spin*, a fun and interactive casino game brought to life in your browser using HTML, CSS, and JavaScript! Inspired by the classic terminal-based Python game, this version adds a beautiful UI with animations and sound effects for an exciting gaming experience.
+
+## View Demo...👇
+
+[**Play the Game Here**](https://vignesh-kandem.github.io/Casino/)
 
 ## 🎮 Game Features
 
@@ -28,17 +32,6 @@ git clone https://github.com/Vignesh-Kandem/Casino
 cd Casino
 ```
 
-## 🕹 How to Play
+## 🖼 Project Screenshot
 
-After Cloning, Run it on any browser.
-- ***Deposit Amount***: Enter the amount of money you'd like to deposit.
-- ***Place Your Be***t: Input the amount you'd like to bet per line (between $1 - $100).
-- ***Select Number of Lines***: Choose from 1, 2, or 3 lines to bet on.
-- ***Spin the Wheel***: Click “Spin” to play. Symbols will randomly generate in a 3x3 grid.
-- ***Check Results***:  
-  → Win if all symbols in a line match.  
-  → Winnings depend on symbol value and number of matching lines.
-- ***Balance Updates***: Your balance will update based on wins or losses.
-- ***Game End***:  
-  → If your balance reaches $0, spinning will be disabled with a message.  
-  → If your bet exceeds balance, a warning will appear.
+![Casino Game Interface](assets/screenshot.png)
